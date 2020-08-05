@@ -4,6 +4,7 @@
 #include "Arduino.h"
 #include "FOCutils.h"
 #include "Sensor.h"
+#include "S_drive_pins.h"
 
 
 /**

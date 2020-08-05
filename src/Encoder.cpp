@@ -186,9 +186,9 @@ void Encoder::init(){
     pinMode(pinB, INPUT_PULLUP);
     if(hasIndex()) pinMode(index_pin,INPUT_PULLUP);
   }else{
-    pinMode(pinA, INPUT);
-    pinMode(pinB, INPUT);
-    if(hasIndex()) pinMode(index_pin,INPUT);
+    pinMode(pinA, INPUT_PULLUP);
+    pinMode(pinB, INPUT_PULLUP);
+    if(hasIndex()) pinMode(index_pin,INPUT_PULLUP);
   }
   
   // counter setup

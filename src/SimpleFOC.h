@@ -89,7 +89,12 @@ void loop() {
 #include "FOCutils.h"
 #include "Sensor.h"
 #include "Encoder.h"
-#include "MagneticSensor.h"
+#include "MagneticSensorSPI.h"
+#include "MagneticSensorI2C.h"
 #include "BLDCMotor.h"
+#include "S_drive_pins.h"
+
+//  Encoder(int encA, int encB , int cpr, int index)
+Encoder encoder = Encoder(PB12, PB13, 512, INDEX);
 
 #endif

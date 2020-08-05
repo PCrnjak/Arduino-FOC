@@ -5,7 +5,7 @@
 // - pp            - pole pair number
 // - cpr           - counts per rotation number (cpm=ppm*4)
 // - enable pin    - (optional input)
-BLDCMotor::BLDCMotor(int phA, int phB, int phC, int pp, int en)
+BLDCMotor::BLDCMotor(int phA, int phB, int phC, int pp)
 {
   // Pin initialization
   pwmA = phA;
@@ -14,7 +14,7 @@ BLDCMotor::BLDCMotor(int phA, int phB, int phC, int pp, int en)
   pole_pairs = pp;
 
   // enable_pin pin
-  enable_pin = en;
+  enable_pin = EN1;
 
   // Power supply voltage
   voltage_power_supply = DEF_POWER_SUPPLY;
@@ -62,17 +62,24 @@ BLDCMotor::BLDCMotor(int phA, int phB, int phC, int pp, int en)
 void BLDCMotor::init() {
   if(monitor_port) monitor_port->println("MONITOR: Initialize the motor pins.");
   // PWM pins
+  
   pinMode(pwmA, OUTPUT);
   pinMode(pwmB, OUTPUT);
   pinMode(pwmC, OUTPUT);
+  pinMode(PC14, OUTPUT);
+  pinMode(PC15, OUTPUT);
+  pinMode(CSn, OUTPUT);
+  digitalWrite(CSn, LOW);
+  Serial.end(); // We use pins that are usually used for USB communication, so we need to kill those coms
+
   if(hasEnable()) pinMode(enable_pin, OUTPUT);
 
   if(monitor_port) monitor_port->println("MONITOR: Set high frequency PWM.");
   // Increase PWM frequency to 32 kHz
   // make silent
-  setPwmFrequency(pwmA);
-  setPwmFrequency(pwmB);
-  setPwmFrequency(pwmC);
+  _setPwmFrequency(pwmA);
+  _setPwmFrequency(pwmB);
+  _setPwmFrequency(pwmC);
 
   // sanity check for the voltage limit configuration
   if(PI_velocity.voltage_limit > voltage_power_supply) PI_velocity.voltage_limit =  voltage_power_supply;
@@ -92,6 +99,8 @@ void BLDCMotor::disable()
   // disable the driver - if enable_pin pin available
   if (hasEnable()) digitalWrite(enable_pin, LOW);
   // set zero to PWM
+  digitalWrite(PC15, LOW);
+  digitalWrite(PC14, LOW);
   setPwm(pwmA, 0);
   setPwm(pwmB, 0);
   setPwm(pwmC, 0);
@@ -103,6 +112,8 @@ void BLDCMotor::enable()
   setPwm(pwmA, 0);
   setPwm(pwmB, 0);
   setPwm(pwmC, 0);
+  digitalWrite(PC15, HIGH);
+  digitalWrite(PC14, HIGH);
   // enable_pin the driver - if enable_pin pin available
   if (hasEnable()) digitalWrite(enable_pin, HIGH);
 

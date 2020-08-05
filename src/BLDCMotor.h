@@ -10,6 +10,7 @@
 #include "FOCutils.h"
 #include "Sensor.h"
 #include "defaults.h"
+#include "S_drive_pins.h"
 
 
 #define NOT_SET -12345.0
@@ -78,7 +79,7 @@ class BLDCMotor
       @param cpr counts per rotation number (cpm=ppm*4)
       @param en enable pin (optional input)
     */
-    BLDCMotor(int phA,int phB,int phC,int pp, int en = NOT_SET);
+    BLDCMotor(int phA,int phB,int phC,int pp);
     
     /**  Motor hardware init function */
   	void init();
